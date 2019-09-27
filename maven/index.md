@@ -35,4 +35,4 @@
       3. post-site : execute processes needed to finalize the site generation, and to prepare for site deployment
       4. site-deploy : deploy the generated site documentation to the specified web server
 
-[目录](/index.md)
+[目录](../index.md)
