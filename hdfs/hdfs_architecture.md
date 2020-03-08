@@ -58,3 +58,20 @@ HDFS很容易从一个平台移动到另外一个平台。
 
 ## Data Replication
 
+1. HDFS被设计成在一个大的集群里存储大文件的的可靠系统。
+2. HDFS将文件存储成一个序列的block
+3. block将被存储多份，以满足错误容忍
+4. 每个文件的block的大小和文件的大小都是可配置的
+5. 一个文件，除了最后一个block的大小是不固定的之外，其他的都是固定的大小。用户可以在不填充满最后一个block的时候启动新的block。
+6. 文件的备份数是随时可以修改的。一个文件只能被写入一次（除非是appends和truncates操作）并且在任何时候永远只有一个写入者。
+7. NameNode的所有决策都与block的备份数有关。它不停的收到从DataNode发来的心跳和Blockreport。心跳代表DataNode目前正常工作。Blockreport包含该DataNode的所有block的list
+![image](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/images/hdfsdatanodes.png)
+
+### Replica Placement: The First Baby Steps
+
+Replica被防止的位置对于HDFS的可靠性和性能至关重要。优化Replica placement将HDFS同其他分布式系统区分开来。这是一个需要大量调试和经验的特性。一个机架可感知的replica placement policy会提高数据的可靠性和性能以及带宽性能。
+NameNode通过一个程序决定某台DataNode属于哪个rackid。通常同一个Rack里面机器之前的带宽要高于不同Rack的机器之间的带宽。一个简单的没有优化过的策略就是把不同的replica放在单独的rack上。这个策略的好处就是可以防止当某个rack挂了的时候数据丢失问题，并且允许使用不同rack上的带宽去读取数据。坏处就是增加了写入的时候的rack之间的带宽的消耗。
+通常的做法是3份replica的其中2个放在一个rack另一个放在另外一个rack上。
+除了rack awareness之外，hdfs还加入了存储类型和存储策略。NameNode首先基于rack awareness选择nodes，然后再基于文件的存储策略去选择nodes。
+
+
