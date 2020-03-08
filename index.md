@@ -4,7 +4,7 @@
    1. [java](/java/index.md)
    2. scala
 2. 大数据
-   1. hdfs
+   1. [hdfs](/hdfs/index.md)
    2. yarn
    3. hbase
    4. hive
