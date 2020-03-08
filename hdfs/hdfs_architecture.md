@@ -45,3 +45,16 @@ HDFS很容易从一个平台移动到另外一个平台。
 5. NameNode执行一些命名空间的操作。类似，打开、关闭和重命名文件和目录。另外，HDFS决定block应该被存储在哪个datanode上。
 6. DataNode负责处理文件系统的客户端的写入和读取请求。DataNode也处理从Namenode下达的创建、删除、复制block的指令。
 ![hdfs](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/images/hdfsarchitecture.png)
+7. HDFS使用java构建。任何支持java的机器都可以运行NameNode和DataNode。Java的高度可移植的特点可以让HDFS被部署到大部分的机器上。一个标准的部署中，通常会有一台机器专门用来运行NameNode。这个架构并不妨碍你在一台机器中部署运行多个DataNode，但是这在真实的部署中是非常少见的。
+8. 一个单独的NameNode简化了整个系统的架构。NameNode在整个系统中是一个仲裁者，并负责HDFS的元数据信息。系统被设计成这样使得用户的数据不会经过NameNode
+
+## 文件系统的命名空间
+
+1. HDFS支持传统的等级划分的文件组织方式。文件被用户或应用程序存放在目录里。
+2. HDFS支持用户quotas和准入权限。
+3. HDFS不支持硬连接和软连接。但是HDFS也不排除实现这些特性。
+4. HDFS服从文件系统的命名约定，有些目录和命名被保留了（比如/ .reserved和.snapshot）。一些特性，比如**透明加密**和**snapshot**用到了这些被保留了的命名。
+5. NameNode负责管理整个文件系统的命名空间。任何有关命名空间或者是命名空间的配置的改动都会被NameNode所记录。应用程序可以设定文件的备份数，这个信息会被NameNode存储。
+
+## Data Replication
+
