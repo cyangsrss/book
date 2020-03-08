@@ -37,3 +37,11 @@ HDFS提供接口让应用程序可以移动到靠近数据的位置。
 HDFS很容易从一个平台移动到另外一个平台。
 
 ## NameNode and DataNode
+
+1. HDFS是一个master/slave架构。一个HDFS集群包含1个NameNode和多个DataNode。
+2. NameNode负责管理文件系统的命名空间以及文件的权限。
+3. DataNode通常是每台节点一个，负责管理它所运行的机器上的存储。
+4. 在HDFS里面，文件被拆分成一个或者多个BLOCK。block被存储在不同的datanode上。
+5. NameNode执行一些命名空间的操作。类似，打开、关闭和重命名文件和目录。另外，HDFS决定block应该被存储在哪个datanode上。
+6. DataNode负责处理文件系统的客户端的写入和读取请求。DataNode也处理从Namenode下达的创建、删除、复制block的指令。
+![hdfs](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/images/hdfsarchitecture.png)
