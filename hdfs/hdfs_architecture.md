@@ -74,4 +74,25 @@ NameNode通过一个程序决定某台DataNode属于哪个rackid。通常同一�
 通常的做法是3份replica的其中2个放在一个rack另一个放在另外一个rack上。
 除了rack awareness之外，hdfs还加入了存储类型和存储策略。NameNode首先基于rack awareness选择nodes，然后再基于文件的存储策略去选择nodes。
 
+### Replica Selection
+
+HDFS client 偏向于去读靠近client位置的replica，比如同一个rack，比如同一个data center。
+
+### safemode
+
+在HDFS启动的时候，NameNode会进入一个safemode的状态。 在这个状态下，block不会被复制。NameNode接受DataNode上报的心跳和Blockreport。Blockreport包含一系列的data blocks。每一个block都会有一个最小的replicas数。如果NameNode检测到某个block的replica数达到了最小的配置数之后，这个block就被标记为safe。当检测到safe的block比例达到一个阈值之后，NameNode就会跳出safemode。如果这个时候有一些block的复制数比配置的小的话，NameNode就开始复制数据。
+
+## The Persistence of File System Metadata
+
+1. HDFS的元信息的任何change都被存储在一个EditLog的文件里。元信息的镜像被存储在FsImage里面。
+2. NameNode在内存里面存储一份整个File system namespace 和 blockmap
+![image](http://i1.fuimg.com/712525/145622c1f413ab11.png)
+3. checkpoint 可以被配置xx时间后执行一次，也可以被配置xxxtranscations被执行一次。相关的配置是dfs.namenode.checkpoint.period/dfs.namenode.checkpoint.txns。如果两个配置都加了的话，先到达触发条件的触发一次checkpoint。
+4. DataNode会给每个Block存放在一个file里面。也会决定每个目录下放多少文件。
+
+## The Communication Protocols
+
+HDFS Communication 建立在TCP/IP协议上。CLient 协议和DataNode协议被包含在一个RPC抽象里。NameNode不调用任何RPC，它只是响应client和DataNode的RPC请求。
+
+## 健壮性
 
