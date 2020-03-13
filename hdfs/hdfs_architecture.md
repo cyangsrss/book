@@ -96,3 +96,7 @@ HDFS Communication 建立在TCP/IP协议上。CLient 协议和DataNode协议被�
 
 ## 健壮性
 
+### 磁盘损坏，心跳，重新复制
+
+DataNode会定期向NameNode发送心跳。如果一段时间（默认是10分钟，可配置）NameNode收不到DataNode的心跳，那么NameNode就会认为这个DataNode已经死亡。NameNode不会将IO的请求发送给已经死亡了的DataNode。另外，NameNode会持续的跟踪哪些需要被复制的Block，并复制他们直到达到他们的默认的复制数。
+
