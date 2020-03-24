@@ -100,3 +100,23 @@ HDFS Communication 建立在TCP/IP协议上。CLient 协议和DataNode协议被�
 
 DataNode会定期向NameNode发送心跳。如果一段时间（默认是10分钟，可配置）NameNode收不到DataNode的心跳，那么NameNode就会认为这个DataNode已经死亡。NameNode不会将IO的请求发送给已经死亡了的DataNode。另外，NameNode会持续的跟踪哪些需要被复制的Block，并复制他们直到达到他们的默认的复制数。
 
+### 集群重新平衡
+
+HDFS架构支持数据重新平衡计划。某个计划可能会在某个DataNode的剩余空间如果降低到了某个阈值之后，将这个DataNode的数据迁移到另外一个机器上。也有可能自动给读取比较热的数据创建多余的replica，并且在集群内重新rebalance。这些schema目前的都没应用。
+
+### 数据准确性
+
+存储在hdfs的block是有可能会被损坏的。原因可能是磁盘损坏，网络错误，或者软件bug。hdfs client会执行一个checksum的检查在hdfs文件内容上。当一个客户端创建了一个hdfs文件的时候，它会给文件的每个block计算一个checksum值，并存储在hdfs数据文件相同目录的一个隐藏文件里。当一个client收到这个数据的时候，它会计算这个数据内容的checksum值和穿过来的checksum file是否一致。如果不一致就重传。
+
+### 元数据磁盘损坏
+
+FsImage和EditLog是hdfs的中心数据结构。这些文件的损坏会导致hdfs整个不可用。因为这个原因，NameNode会被配置成支持多个FsImage和EditLog备份。对任意FsImage和EditLog的更新都会触发其他FsImage和EditLog的同步。这些同步操作会降低NameNode每秒可支撑的namespace transaction数。
+但是这个降低是能忍受的，因为虽然hdfs天然是数据密集的，但是并不是元数据密集的。
+
+还有一个选择去提升容错是使用多个NameNode，使用一个共享的存储空间在NFS上，或者用一个分布式的edit log（称为Journal）。
+
+### Snapshots
+Snapshots支持给hdfs上的某个数据创建一个快照。
+
+## 数据组织
+
