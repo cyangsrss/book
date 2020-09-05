@@ -2,7 +2,7 @@
 
 1. 编程语言
    1. [java](/java/index.md)
-   2. scala
+   2. [scala](/scala/index.md)
 2. 大数据
    1. [hdfs](/hdfs/index.md)
    2. yarn
