@@ -116,7 +116,19 @@ FsImage和EditLog是hdfs的中心数据结构。这些文件的损坏会导致hd
 还有一个选择去提升容错是使用多个NameNode，使用一个共享的存储空间在NFS上，或者用一个分布式的edit log（称为Journal）。
 
 ### Snapshots
+
 Snapshots支持给hdfs上的某个数据创建一个快照。
 
 ## 数据组织
 
+### 数据块
+
+### replication pipelining
+
+### 访问通道
+
+1. [Java API](http://hadoop.apache.org/docs/current/api/)
+2. [c](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/LibHdfs.html)
+3. [REST API](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html)
+4. [NFS gateway](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsNfsGateway.html)
+5. [FS Shell](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html)
